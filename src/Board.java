@@ -9,25 +9,25 @@ public class Board {
 	 * 		Large 	  - 16x32, 100 Mines
 	 * 		Humongous - 32x32, 225 Mines
 	 */
-	public static int SMALL = 0;
-	public static int MEDIUM = 1;
-	public static int LARGE = 2;
-	public static int HUMONGOUS = 3;
+	public static final int SMALL = 0;
+	public static final int MEDIUM = 1;
+	public static final int LARGE = 2;
+	public static final int HUMONGOUS = 3;
 
 	/**
 	 * Board View Matrix Constants
 	 */
-	public static int HIDDEN = 0;
-	public static int SHOWN = 1;
-	public static int FLAGGED = 2;
-	public static int QMARK = 3;
+	public static final int HIDDEN = 0;
+	public static final int SHOWN = 1;
+	public static final int FLAGGED = 2;
+	public static final int QMARK = 3;
 
 	/**
 	 * Board Constants
 	 */
-	public static int MINE = -1;
+	public static final int MINE = -1;
 
-	private static int[][] boardSizes = { { 8, 8, 10 }, { 16, 16, 40 }, { 16, 32, 100 }, { 32, 32, 225 } };
+	private static final int[][] boardSizes = { { 8, 8, 10 }, { 16, 16, 40 }, { 16, 32, 100 }, { 32, 32, 225 } };
 
 	private int[][] board, viewMatrix;
 	private int rows, cols, mines, flags;
@@ -125,6 +125,13 @@ public class Board {
 	}
 
 	// TODO: Flag method. HIDDEN->FLAGGED->QMARK->Hidden
+	public void flag(int row, int col) {
+		switch(viewMatrix[row][col]) {
+		case HIDDEN: viewMatrix[row][col] = FLAGGED; break;
+		case FLAGGED: viewMatrix[row][col] = QMARK; break;
+		case QMARK: viewMatrix[row][col] = HIDDEN; break;
+		}
+	}
 	
 	// TODO: 
 	
@@ -167,6 +174,14 @@ public class Board {
 	 */
 	public int[][] getViewMatrix() {
 		return this.viewMatrix;
+	}
+
+	public int getRows() {
+		return rows;
+	}
+
+	public int getCols() {
+		return cols;
 	}
 
 }
