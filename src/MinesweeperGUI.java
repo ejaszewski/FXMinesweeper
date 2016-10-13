@@ -3,11 +3,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -137,6 +139,13 @@ public class MinesweeperGUI extends Application {
 		}
 	}
 	
+	public void disableAll() {
+		for(Node node : boardView.getChildren()) {
+			Cell cell = (Cell)node;
+			cell.disable();
+		}
+	}
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -161,8 +170,17 @@ public class MinesweeperGUI extends Application {
 				@Override
 				public void handle(MouseEvent event) {
 					if(event.getButton() == MouseButton.PRIMARY) {
-						if(!disable)
-							current.reveal(row, col);
+						if(!disable) {
+							boolean success = current.reveal(row, col);
+							if(!success) {
+								Alert a = new Alert(AlertType.INFORMATION);
+								a.setTitle("You Lost!");
+								a.setHeaderText("You Lost!");
+								a.setContentText("You hit a mine and lost. Try again.");
+								a.show();
+								disableAll();
+							}
+						}
 					} else {
 						current.flag(row, col);
 					}
@@ -194,6 +212,10 @@ public class MinesweeperGUI extends Application {
 				button.setVisible(true);
 				break;
 			}
+		}
+		
+		public void disable() {
+			button.setDisable(true);
 		}
 		
 	}
