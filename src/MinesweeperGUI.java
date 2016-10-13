@@ -3,11 +3,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -125,7 +127,7 @@ public class MinesweeperGUI extends Application {
 		int[][] viewM = current.getViewMatrix();
 		for(int i = 0; i < current.getRows(); i++) {
 			for(int j = 0; j < current.getCols(); j++) {
-				boardView.add(new Cell(board[i][j], i, j, 20), i, j);
+				boardView.add(new Cell(board[i][j], i, j, 40), i, j);
 			}
 		}
 	}
@@ -134,6 +136,13 @@ public class MinesweeperGUI extends Application {
 		for(Node node : boardView.getChildren()) {
 			Cell cell = (Cell)node;
 			cell.update();
+		}
+	}
+	
+	public void disableAll() {
+		for(Node node : boardView.getChildren()) {
+			Cell cell = (Cell)node;
+			cell.disable();
 		}
 	}
 	
@@ -160,11 +169,28 @@ public class MinesweeperGUI extends Application {
 			button.setOnMouseClicked(new EventHandler<MouseEvent>() {
 				@Override
 				public void handle(MouseEvent event) {
-					if(event.getButton() == MouseButton.PRIMARY)
-						if(!disable)
-							current.reveal(row, col);
-					else
+					if(event.getButton() == MouseButton.PRIMARY) {
+						if(!disable) {
+							boolean success = current.reveal(row, col);
+							if(!success) {
+								Alert a = new Alert(AlertType.INFORMATION);
+								a.setTitle("You Lost!");
+								a.setHeaderText("You Lost!");
+								a.setContentText("You hit a mine and lost. Try again.");
+								a.show();
+								disableAll();
+							} else if(current.isWon()) {
+								Alert a = new Alert(AlertType.INFORMATION);
+								a.setTitle("You Won!");
+								a.setHeaderText("You Won!");
+								a.setContentText("You found all of the mines and won! Congratulations!");
+								a.show();
+								disableAll();
+							}
+						}
+					} else {
 						current.flag(row, col);
+					}
 
 					updateBoardView();
 				}
@@ -193,6 +219,10 @@ public class MinesweeperGUI extends Application {
 				button.setVisible(true);
 				break;
 			}
+		}
+		
+		public void disable() {
+			button.setDisable(true);
 		}
 		
 	}

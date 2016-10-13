@@ -127,13 +127,11 @@ public class Board {
 	// TODO: Flag method. HIDDEN->FLAGGED->QMARK->Hidden
 	public void flag(int row, int col) {
 		switch(viewMatrix[row][col]) {
-		case HIDDEN: viewMatrix[row][col] = FLAGGED; break;
-		case FLAGGED: viewMatrix[row][col] = QMARK; break;
+		case HIDDEN: viewMatrix[row][col] = FLAGGED; flags++; break;
+		case FLAGGED: viewMatrix[row][col] = QMARK; flags--; break;
 		case QMARK: viewMatrix[row][col] = HIDDEN; break;
 		}
 	}
-	
-	// TODO: 
 	
 	/**
 	 * This print method has two behaviors based on showAll. If showAll is true,
@@ -182,6 +180,17 @@ public class Board {
 
 	public int getCols() {
 		return cols;
+	}
+	
+	public boolean isWon() {
+		boolean won = true;
+		for (int r = 0; r < rows; r++) {
+			for (int c = 0; c < cols; c++) {
+				if(viewMatrix[r][c] == HIDDEN && board[r][c] != MINE)
+					won = false;
+			}
+		}
+		return won;
 	}
 
 }
