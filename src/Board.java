@@ -181,5 +181,16 @@ public class Board {
 	public int getCols() {
 		return cols;
 	}
+	
+	public boolean isVictory() {
+		boolean won = true;
+		for (int r = 0; r < rows; r++) {
+			for (int c = 0; c < cols; c++) {
+				if(viewMatrix[r][c] == HIDDEN && board[r][c] != MINE)
+					won = false;
+			}
+		}
+		return won;
+	}
 
 }

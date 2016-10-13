@@ -179,6 +179,13 @@ public class MinesweeperGUI extends Application {
 								a.setContentText("You hit a mine and lost. Try again.");
 								a.show();
 								disableAll();
+							} else if(current.isVictory()) {
+								Alert a = new Alert(AlertType.INFORMATION);
+								a.setTitle("You Won!");
+								a.setHeaderText("You Won!");
+								a.setContentText("You found all of the mines and won! Congratulations!");
+								a.show();
+								disableAll();
 							}
 						}
 					} else {
