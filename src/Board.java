@@ -133,8 +133,6 @@ public class Board {
 		}
 	}
 	
-	// TODO: 
-	
 	/**
 	 * This print method has two behaviors based on showAll. If showAll is true,
 	 * it will print the board, ignoring the viewMatrix (all mines shown),

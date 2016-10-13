@@ -125,7 +125,7 @@ public class MinesweeperGUI extends Application {
 		int[][] viewM = current.getViewMatrix();
 		for(int i = 0; i < current.getRows(); i++) {
 			for(int j = 0; j < current.getCols(); j++) {
-				boardView.add(new Cell(board[i][j], i, j, 20), i, j);
+				boardView.add(new Cell(board[i][j], i, j, 40), i, j);
 			}
 		}
 	}
@@ -160,11 +160,12 @@ public class MinesweeperGUI extends Application {
 			button.setOnMouseClicked(new EventHandler<MouseEvent>() {
 				@Override
 				public void handle(MouseEvent event) {
-					if(event.getButton() == MouseButton.PRIMARY)
+					if(event.getButton() == MouseButton.PRIMARY) {
 						if(!disable)
 							current.reveal(row, col);
-					else
+					} else {
 						current.flag(row, col);
+					}
 
 					updateBoardView();
 				}
