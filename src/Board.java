@@ -127,8 +127,8 @@ public class Board {
 	// TODO: Flag method. HIDDEN->FLAGGED->QMARK->Hidden
 	public void flag(int row, int col) {
 		switch(viewMatrix[row][col]) {
-		case HIDDEN: viewMatrix[row][col] = FLAGGED; break;
-		case FLAGGED: viewMatrix[row][col] = QMARK; break;
+		case HIDDEN: viewMatrix[row][col] = FLAGGED; flags++; break;
+		case FLAGGED: viewMatrix[row][col] = QMARK; flags--; break;
 		case QMARK: viewMatrix[row][col] = HIDDEN; break;
 		}
 	}
