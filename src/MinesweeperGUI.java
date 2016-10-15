@@ -52,8 +52,6 @@ public class MinesweeperGUI extends Application {
 		view.getItems().add(fullscreen);
 		
 		MenuBar bar = new MenuBar(fileMenu(), editMenu(), view);
-		
-		
 		root.getChildren().add(bar);
 		
 		Scene scene = new Scene(root);
@@ -149,7 +147,7 @@ public class MinesweeperGUI extends Application {
 		preferences.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				
+				new Preferences(stage);
 			}
 		});
 		preferences.setAccelerator(new KeyCodeCombination(KeyCode.ENTER, KeyCombination.ALT_DOWN));
