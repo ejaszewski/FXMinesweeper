@@ -37,12 +37,6 @@ public class MinesweeperGUI extends Application {
 		
 		VBox root = new VBox();
 		
-		Menu edit = new Menu("Edit");
-		edit.getItems().add(new MenuItem("Restart Game"));
-		edit.getItems().add(new MenuItem("Undo Move"));
-		edit.getItems().add(new MenuItem("Redo Move"));
-		edit.getItems().add(new MenuItem("Settings"));
-		
 		Menu view = new Menu("View");
 		CheckMenuItem fullscreen = new CheckMenuItem("Fullscreen");
 		fullscreen.setOnAction(new EventHandler<ActionEvent>() {
@@ -57,7 +51,7 @@ public class MinesweeperGUI extends Application {
 		fullscreen.setAccelerator(new KeyCodeCombination(KeyCode.F12));
 		view.getItems().add(fullscreen);
 		
-		MenuBar bar = new MenuBar(getFileMenu(), edit, view);
+		MenuBar bar = new MenuBar(fileMenu(), editMenu(), view);
 		
 		
 		root.getChildren().add(bar);
@@ -73,7 +67,7 @@ public class MinesweeperGUI extends Application {
 		stage.centerOnScreen();
 	}
 	
-	private Menu getFileMenu() {
+	private Menu fileMenu() {
 		Menu file = new Menu("File");
 		
 		MenuItem newGame = new MenuItem("New Game");
@@ -119,6 +113,52 @@ public class MinesweeperGUI extends Application {
 		file.getItems().add(saveGameAs);
 		file.getItems().add(loadGame);
 		return file;
+	}
+	
+	public Menu editMenu() {
+		Menu edit = new Menu("Edit");
+		
+		MenuItem restart = new MenuItem("Restart Game");
+		restart.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				
+			}
+		});
+		restart.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN));
+		
+		MenuItem undo = new MenuItem("Undo Move");
+		undo.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				
+			}
+		});
+		undo.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN));
+		
+		MenuItem redo = new MenuItem("Redo Move");
+		redo.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				
+			}
+		});
+		redo.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
+		
+		MenuItem settings = new MenuItem("Settings");
+		settings.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				
+			}
+		});
+		settings.setAccelerator(new KeyCodeCombination(KeyCode.ENTER, KeyCombination.ALT_DOWN));
+		
+		edit.getItems().add(restart);
+		edit.getItems().add(undo);
+		edit.getItems().add(redo);
+		edit.getItems().add(settings);
+		return edit;
 	}
 	
 	public void createBoardView() {
