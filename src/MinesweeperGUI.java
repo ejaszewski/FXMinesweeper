@@ -145,19 +145,19 @@ public class MinesweeperGUI extends Application {
 		});
 		redo.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
 		
-		MenuItem settings = new MenuItem("Settings");
-		settings.setOnAction(new EventHandler<ActionEvent>() {
+		MenuItem preferences = new MenuItem("Preferences");
+		preferences.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				
 			}
 		});
-		settings.setAccelerator(new KeyCodeCombination(KeyCode.ENTER, KeyCombination.ALT_DOWN));
+		preferences.setAccelerator(new KeyCodeCombination(KeyCode.ENTER, KeyCombination.ALT_DOWN));
 		
 		edit.getItems().add(restart);
 		edit.getItems().add(undo);
 		edit.getItems().add(redo);
-		edit.getItems().add(settings);
+		edit.getItems().add(preferences);
 		return edit;
 	}
 	
