@@ -60,6 +60,7 @@ public class MinesweeperGUI extends Application {
 		createBoardView();
 		root.getChildren().add(boardView);
 		
+		stage.setTitle("FX Minesweeper");
 		stage.setScene(scene);
 		stage.show();
 		stage.centerOnScreen();
@@ -184,6 +185,22 @@ public class MinesweeperGUI extends Application {
 		}
 	}
 	
+	public void showWinDialog() {
+		Alert a = new Alert(AlertType.INFORMATION);
+		a.setTitle("You Won!");
+		a.setHeaderText("You Won!");
+		a.setContentText("You found all of the mines and won! Congratulations!");
+		a.show();
+	}
+	
+	public void showLoseDialog() {
+		Alert a = new Alert(AlertType.INFORMATION);
+		a.setTitle("You Lost!");
+		a.setHeaderText("You Lost!");
+		a.setContentText("You hit a mine and lost. Try again.");
+		a.show();
+	}
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -211,18 +228,10 @@ public class MinesweeperGUI extends Application {
 						if(!disable) {
 							boolean success = current.reveal(row, col);
 							if(!success) {
-								Alert a = new Alert(AlertType.INFORMATION);
-								a.setTitle("You Lost!");
-								a.setHeaderText("You Lost!");
-								a.setContentText("You hit a mine and lost. Try again.");
-								a.show();
+								showLoseDialog();
 								disableAll();
 							} else if(current.isWon()) {
-								Alert a = new Alert(AlertType.INFORMATION);
-								a.setTitle("You Won!");
-								a.setHeaderText("You Won!");
-								a.setContentText("You found all of the mines and won! Congratulations!");
-								a.show();
+								showWinDialog();
 								disableAll();
 							}
 						}
