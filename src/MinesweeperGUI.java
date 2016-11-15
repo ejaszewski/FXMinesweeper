@@ -1,21 +1,27 @@
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -29,11 +35,14 @@ public class MinesweeperGUI extends Application {
 	private Stage stage;
 	private GridPane boardView;
 	private Board current;
+	
+	private Stage newGameStage;
 
 	@Override
 	public void start(Stage arg0) throws Exception {
 		
 		this.stage = arg0;
+		this.stage.setTitle("Minesweeper");
 		
 		VBox root = new VBox();
 		
@@ -59,7 +68,6 @@ public class MinesweeperGUI extends Application {
 		
 		MenuBar bar = new MenuBar(getFileMenu(), edit, view);
 		
-		
 		root.getChildren().add(bar);
 		
 		Scene scene = new Scene(root);
@@ -71,6 +79,80 @@ public class MinesweeperGUI extends Application {
 		stage.setScene(scene);
 		stage.show();
 		stage.centerOnScreen();
+		
+		getNewGameStage(root);
+	}
+	
+	private void getNewGameStage(VBox root) {
+		newGameStage = new Stage();
+		newGameStage.setTitle("New Game");
+		
+		GridPane gridPane = new GridPane();
+		gridPane.setHgap(10);
+		gridPane.setVgap(12);
+		gridPane.setAlignment(Pos.CENTER);
+		
+		Label newGameLabel = new Label("New Game");		
+		newGameLabel.setStyle("-fx-font-size: 16pt;");
+		gridPane.add(newGameLabel, 0, 0, 2, 1);
+		GridPane.setHalignment(newGameLabel, HPos.CENTER);
+		
+		ComboBox<String> comboBox = new ComboBox<String>();
+		comboBox.getItems().addAll("Small", "Medium", "Large", "Humongous");
+		comboBox.setValue("Small");
+		gridPane.add(comboBox, 0, 1, 2, 1);
+		GridPane.setHalignment(comboBox, HPos.CENTER);
+		
+		Button startButton = new Button("Start");
+		startButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				switch(comboBox.getSelectionModel().getSelectedItem()) {
+				case "Small":
+					current = new Board(Board.SMALL);
+					break;
+					
+				case "Medium":
+					current = new Board(Board.MEDIUM);
+					break;
+					
+				case "Large":
+					current = new Board(Board.LARGE);
+					break;
+					
+				case "Humongous":
+					current = new Board(Board.HUMONGOUS);
+					break;
+				}
+				
+				root.getChildren().remove(boardView);
+				createBoardView();
+				root.getChildren().add(boardView);
+				newGameStage.hide();
+				stage.hide();
+				stage.show();
+			}
+		});
+		
+		Button cancelButton = new Button("Cancel");
+		cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				newGameStage.hide();
+			}
+		});
+		
+		HBox buttons = new HBox();
+		buttons.setSpacing(10);
+		buttons.getChildren().addAll(startButton, cancelButton);
+		gridPane.add(buttons, 0, 2, 2, 1);
+		gridPane.setPadding(new Insets(10, 70, 20, 70));
+		
+		Scene newGameScene = new Scene(gridPane);
+		newGameStage.setScene(newGameScene);
+		
+		newGameStage.show();
+		newGameStage.centerOnScreen();
 	}
 	
 	private Menu getFileMenu() {
@@ -80,7 +162,7 @@ public class MinesweeperGUI extends Application {
 		newGame.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				
+				newGameStage.show();
 			}
 		});
 		newGame.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
@@ -224,7 +306,5 @@ public class MinesweeperGUI extends Application {
 		public void disable() {
 			button.setDisable(true);
 		}
-		
 	}
-
 }
