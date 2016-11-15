@@ -4,18 +4,21 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -29,6 +32,8 @@ public class MinesweeperGUI extends Application {
 	private Stage stage;
 	private GridPane boardView;
 	private Board current;
+	
+	private Stage newGame;
 
 	@Override
 	public void start(Stage arg0) throws Exception {
@@ -59,7 +64,6 @@ public class MinesweeperGUI extends Application {
 		
 		MenuBar bar = new MenuBar(getFileMenu(), edit, view);
 		
-		
 		root.getChildren().add(bar);
 		
 		Scene scene = new Scene(root);
@@ -71,6 +75,25 @@ public class MinesweeperGUI extends Application {
 		stage.setScene(scene);
 		stage.show();
 		stage.centerOnScreen();
+		
+		// New game
+		VBox newGameRoot = new VBox();
+		
+		// Could use a GridPane instead...
+		// Just testing here, learning JavaFX
+		HBox sizeRoot = new HBox();
+		Label width = new Label("Width");
+		TextField numberField = new TextField();
+		sizeRoot.getChildren().addAll(width, numberField);
+		sizeRoot.setSpacing(10);
+		
+		newGameRoot.getChildren().add(sizeRoot);
+		
+		Scene newGameScene = new Scene(newGameRoot);
+		
+		newGame = new Stage();
+		newGame.setScene(newGameScene);
+		newGame.show();
 	}
 	
 	private Menu getFileMenu() {
