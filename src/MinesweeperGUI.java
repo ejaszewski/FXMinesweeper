@@ -86,7 +86,6 @@ public class MinesweeperGUI extends Application {
 	private void getNewGameStage(VBox root) {
 		newGameStage = new Stage();
 		newGameStage.setTitle("New Game");
-		newGameStage.show();
 		
 		GridPane gridPane = new GridPane();
 		gridPane.setHgap(10);
@@ -136,6 +135,12 @@ public class MinesweeperGUI extends Application {
 		});
 		
 		Button cancelButton = new Button("Cancel");
+		cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				newGameStage.hide();
+			}
+		});
 		
 		HBox buttons = new HBox();
 		buttons.setSpacing(10);
@@ -145,6 +150,9 @@ public class MinesweeperGUI extends Application {
 		
 		Scene newGameScene = new Scene(gridPane);
 		newGameStage.setScene(newGameScene);
+		
+		newGameStage.show();
+		newGameStage.centerOnScreen();
 	}
 	
 	private Menu getFileMenu() {
@@ -155,7 +163,6 @@ public class MinesweeperGUI extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				newGameStage.show();
-				newGameStage.centerOnScreen();
 			}
 		});
 		newGame.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
