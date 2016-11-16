@@ -1,17 +1,20 @@
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -76,23 +79,37 @@ public class MinesweeperGUI extends Application {
 		stage.show();
 		stage.centerOnScreen();
 		
-		// New game
-		VBox newGameRoot = new VBox();
+		// New game window
+		GridPane gridPane = new GridPane();
+		gridPane.setHgap(10);
+		gridPane.setVgap(12);
+		gridPane.setAlignment(Pos.CENTER);
 		
-		// Could use a GridPane instead...
-		// Just testing here, learning JavaFX
-		HBox sizeRoot = new HBox();
-		Label width = new Label("Width");
-		TextField numberField = new TextField();
-		sizeRoot.getChildren().addAll(width, numberField);
-		sizeRoot.setSpacing(10);
+		Label newGameLabel = new Label("New Game");		
+		newGameLabel.setStyle("-fx-font-size: 16pt;");
+		gridPane.add(newGameLabel, 0, 0, 2, 1);
+		GridPane.setHalignment(newGameLabel, HPos.CENTER);
 		
-		newGameRoot.getChildren().add(sizeRoot);
+		ComboBox<String> comboBox = new ComboBox<String>();
+		comboBox.getItems().addAll("Small", "Medium", "Large", "Humongous");
+		comboBox.setValue("Small");
+		gridPane.add(comboBox, 0, 1, 2, 1);
+		GridPane.setHalignment(comboBox, HPos.CENTER);
 		
-		Scene newGameScene = new Scene(newGameRoot);
+		Button startButton = new Button("Start");
+		Button cancelButton = new Button("Cancel");
+		
+		HBox buttons = new HBox();
+		buttons.setSpacing(10);
+		buttons.getChildren().addAll(startButton, cancelButton);
+		gridPane.add(buttons, 0, 2, 2, 1);
+		gridPane.setPadding(new Insets(10, 70, 20, 70));
+		
+		Scene newGameScene = new Scene(gridPane);
 		
 		newGame = new Stage();
 		newGame.setScene(newGameScene);
+		newGame.setTitle("New Game");
 		newGame.show();
 	}
 	
