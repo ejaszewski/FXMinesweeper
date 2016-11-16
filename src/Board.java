@@ -36,7 +36,7 @@ public class Board {
 	 * Creates a 'SMALL' board.
 	 */
 	public Board() {
-		this(SMALL);
+		this(LARGE);
 	}
 
 	/**

@@ -36,12 +36,13 @@ public class MinesweeperGUI extends Application {
 	private GridPane boardView;
 	private Board current;
 	
-	private Stage newGame;
+	private Stage newGameStage;
 
 	@Override
 	public void start(Stage arg0) throws Exception {
 		
 		this.stage = arg0;
+		this.stage.setTitle("Minesweeper");
 		
 		VBox root = new VBox();
 		
@@ -79,7 +80,14 @@ public class MinesweeperGUI extends Application {
 		stage.show();
 		stage.centerOnScreen();
 		
-		// New game window
+		getNewGameStage(root);
+	}
+	
+	private void getNewGameStage(VBox root) {
+		newGameStage = new Stage();
+		newGameStage.setTitle("New Game");
+		newGameStage.show();
+		
 		GridPane gridPane = new GridPane();
 		gridPane.setHgap(10);
 		gridPane.setVgap(12);
@@ -97,6 +105,36 @@ public class MinesweeperGUI extends Application {
 		GridPane.setHalignment(comboBox, HPos.CENTER);
 		
 		Button startButton = new Button("Start");
+		startButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				switch(comboBox.getSelectionModel().getSelectedItem()) {
+				case "Small":
+					current = new Board(Board.SMALL);
+					break;
+					
+				case "Medium":
+					current = new Board(Board.MEDIUM);
+					break;
+					
+				case "Large":
+					current = new Board(Board.LARGE);
+					break;
+					
+				case "Humongous":
+					current = new Board(Board.HUMONGOUS);
+					break;
+				}
+				
+				root.getChildren().remove(boardView);
+				createBoardView();
+				root.getChildren().add(boardView);
+				newGameStage.hide();
+				stage.hide();
+				stage.show();
+			}
+		});
+		
 		Button cancelButton = new Button("Cancel");
 		
 		HBox buttons = new HBox();
@@ -106,11 +144,7 @@ public class MinesweeperGUI extends Application {
 		gridPane.setPadding(new Insets(10, 70, 20, 70));
 		
 		Scene newGameScene = new Scene(gridPane);
-		
-		newGame = new Stage();
-		newGame.setScene(newGameScene);
-		newGame.setTitle("New Game");
-		newGame.show();
+		newGameStage.setScene(newGameScene);
 	}
 	
 	private Menu getFileMenu() {
@@ -120,7 +154,8 @@ public class MinesweeperGUI extends Application {
 		newGame.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				
+				newGameStage.show();
+				newGameStage.centerOnScreen();
 			}
 		});
 		newGame.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
@@ -264,7 +299,5 @@ public class MinesweeperGUI extends Application {
 		public void disable() {
 			button.setDisable(true);
 		}
-		
 	}
-
 }
