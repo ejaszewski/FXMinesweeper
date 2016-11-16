@@ -150,8 +150,6 @@ public class MinesweeperGUI extends Application {
 		
 		Scene newGameScene = new Scene(gridPane);
 		newGameStage.setScene(newGameScene);
-		
-		newGameStage.show();
 		newGameStage.centerOnScreen();
 	}
 	
