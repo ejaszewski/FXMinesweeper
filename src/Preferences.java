@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -30,7 +33,15 @@ public class Preferences extends Stage {
 		ok.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				
+				File cFile = new File("./config/main.cfg");
+				if(!cFile.getParentFile().exists())
+					cFile.mkdir();
+				if(!cFile.exists())
+					try {
+						cFile.createNewFile();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 			}
 		});
 
