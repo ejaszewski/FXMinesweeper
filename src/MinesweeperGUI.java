@@ -46,12 +46,6 @@ public class MinesweeperGUI extends Application {
 		
 		VBox root = new VBox();
 		
-		Menu edit = new Menu("Edit");
-		edit.getItems().add(new MenuItem("Restart Game"));
-		edit.getItems().add(new MenuItem("Undo Move"));
-		edit.getItems().add(new MenuItem("Redo Move"));
-		edit.getItems().add(new MenuItem("Settings"));
-		
 		Menu view = new Menu("View");
 		CheckMenuItem fullscreen = new CheckMenuItem("Fullscreen");
 		fullscreen.setOnAction(new EventHandler<ActionEvent>() {
@@ -67,7 +61,6 @@ public class MinesweeperGUI extends Application {
 		view.getItems().add(fullscreen);
 		
 		MenuBar bar = new MenuBar(getFileMenu(), edit, view);
-		
 		root.getChildren().add(bar);
 		
 		Scene scene = new Scene(root);
@@ -76,6 +69,7 @@ public class MinesweeperGUI extends Application {
 		createBoardView();
 		root.getChildren().add(boardView);
 		
+		stage.setTitle("FX Minesweeper");
 		stage.setScene(scene);
 		stage.show();
 		stage.centerOnScreen();
@@ -153,7 +147,7 @@ public class MinesweeperGUI extends Application {
 		newGameStage.centerOnScreen();
 	}
 	
-	private Menu getFileMenu() {
+	private Menu fileMenu() {
 		Menu file = new Menu("File");
 		
 		MenuItem newGame = new MenuItem("New Game");
@@ -201,6 +195,52 @@ public class MinesweeperGUI extends Application {
 		return file;
 	}
 	
+	public Menu editMenu() {
+		Menu edit = new Menu("Edit");
+		
+		MenuItem restart = new MenuItem("Restart Game");
+		restart.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				
+			}
+		});
+		restart.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN));
+		
+		MenuItem undo = new MenuItem("Undo Move");
+		undo.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				
+			}
+		});
+		undo.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN));
+		
+		MenuItem redo = new MenuItem("Redo Move");
+		redo.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				
+			}
+		});
+		redo.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
+		
+		MenuItem preferences = new MenuItem("Preferences");
+		preferences.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				new Preferences(stage);
+			}
+		});
+		preferences.setAccelerator(new KeyCodeCombination(KeyCode.ENTER, KeyCombination.ALT_DOWN));
+		
+		edit.getItems().add(restart);
+		edit.getItems().add(undo);
+		edit.getItems().add(redo);
+		edit.getItems().add(preferences);
+		return edit;
+	}
+	
 	public void createBoardView() {
 		boardView = new GridPane();
 		int[][] board = current.getBoard();
@@ -224,6 +264,22 @@ public class MinesweeperGUI extends Application {
 			Cell cell = (Cell)node;
 			cell.disable();
 		}
+	}
+	
+	public void showWinDialog() {
+		Alert a = new Alert(AlertType.INFORMATION);
+		a.setTitle("You Won!");
+		a.setHeaderText("You Won!");
+		a.setContentText("You found all of the mines and won! Congratulations!");
+		a.show();
+	}
+	
+	public void showLoseDialog() {
+		Alert a = new Alert(AlertType.INFORMATION);
+		a.setTitle("You Lost!");
+		a.setHeaderText("You Lost!");
+		a.setContentText("You hit a mine and lost. Try again.");
+		a.show();
 	}
 	
 	public static void main(String[] args) {
@@ -253,18 +309,10 @@ public class MinesweeperGUI extends Application {
 						if(!disable) {
 							boolean success = current.reveal(row, col);
 							if(!success) {
-								Alert a = new Alert(AlertType.INFORMATION);
-								a.setTitle("You Lost!");
-								a.setHeaderText("You Lost!");
-								a.setContentText("You hit a mine and lost. Try again.");
-								a.show();
+								showLoseDialog();
 								disableAll();
 							} else if(current.isWon()) {
-								Alert a = new Alert(AlertType.INFORMATION);
-								a.setTitle("You Won!");
-								a.setHeaderText("You Won!");
-								a.setContentText("You found all of the mines and won! Congratulations!");
-								a.show();
+								showWinDialog();
 								disableAll();
 							}
 						}
