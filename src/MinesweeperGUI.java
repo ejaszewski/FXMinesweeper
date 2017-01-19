@@ -60,7 +60,7 @@ public class MinesweeperGUI extends Application {
 		fullscreen.setAccelerator(new KeyCodeCombination(KeyCode.F12));
 		view.getItems().add(fullscreen);
 		
-		MenuBar bar = new MenuBar(getFileMenu(), edit, view);
+		MenuBar bar = new MenuBar(fileMenu(), editMenu(), view);
 		root.getChildren().add(bar);
 		
 		Scene scene = new Scene(root);

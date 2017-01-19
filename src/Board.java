@@ -173,6 +173,14 @@ public class Board {
 	public int[][] getViewMatrix() {
 		return this.viewMatrix;
 	}
+	
+	/**
+	 * Sets the internal view matrix.
+	 * @param viewMatrix new view matrix
+	 */
+	public void setViewMatrix(int[][] viewMatrix) {
+		this.viewMatrix = viewMatrix;
+	}
 
 	public int getRows() {
 		return rows;
@@ -182,6 +190,20 @@ public class Board {
 		return cols;
 	}
 	
+	/**
+	 * @return the mines
+	 */
+	public int getMines() {
+		return mines;
+	}
+
+	/**
+	 * @return the flags
+	 */
+	public int getFlags() {
+		return flags;
+	}
+
 	public boolean isWon() {
 		boolean won = true;
 		for (int r = 0; r < rows; r++) {
