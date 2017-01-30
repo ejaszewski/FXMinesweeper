@@ -27,9 +27,9 @@ public class NewGUI extends Application {
 	};
 	private static final Runnable loseAction = () -> {
 		Alert a = new Alert(AlertType.INFORMATION);
-		a.setTitle("You Won!");
-		a.setHeaderText("You Won!");
-		a.setContentText("You found all of the mines and won! Congratulations!");
+		a.setTitle("You Lost!");
+		a.setHeaderText("You Lost!");
+		a.setContentText("You hit a mine and lost. Try again.");
 		a.show();
 	};
 	
