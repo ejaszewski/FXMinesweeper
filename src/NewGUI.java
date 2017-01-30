@@ -1,9 +1,12 @@
 import javafx.application.Application;
+import javafx.geometry.Bounds;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -14,6 +17,21 @@ public class NewGUI extends Application {
 	
 	private Stage stage;
 	private BoardContainer board;
+	private static final Runnable winAction = () -> {
+		Alert a = new Alert(AlertType.INFORMATION);
+		a.setTitle("You Won!");
+		a.setHeaderText("You Won!");
+		a.setContentText("You found all of the mines and won! Congratulations!");
+		a.show();
+	};
+	private static final Runnable loseAction = () -> {
+		Alert a = new Alert(AlertType.INFORMATION);
+		a.setTitle("You Won!");
+		a.setHeaderText("You Won!");
+		a.setContentText("You found all of the mines and won! Congratulations!");
+		a.show();
+	};
+	
 	
 	public void start(Stage arg0) {
 		stage = arg0;
@@ -22,7 +40,7 @@ public class NewGUI extends Application {
 		
 		root.setTop(new MenuBar(fileMenu(), editMenu(), viewMenu()));
 		
-		board = new BoardContainer(new Board(Board.MEDIUM), 25);
+		board = new BoardContainer(new Board(Board.MEDIUM), 20, winAction, loseAction, stage);
 		
 		root.setCenter(board.getBoardView());
 		

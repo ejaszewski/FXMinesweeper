@@ -1,17 +1,20 @@
 import java.util.Arrays;
 import java.util.Stack;
 
+import javafx.beans.value.ChangeListener;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class BoardContainer {
 	
@@ -23,16 +26,31 @@ public class BoardContainer {
 	private Board board;
 	private Stack<int[][]> redoBuffer, undoBuffer;
 	private GridPane boardView;
+	private Runnable winAction, loseAction;
 	
-	public BoardContainer(Board board, int cellSize) {
+	public BoardContainer(Board board, int cellSize, Runnable winAction, Runnable loseAction, Stage stage) {
 		this.board = board;
 		this.undoBuffer = new Stack<int[][]>();
 		this.redoBuffer = new Stack<int[][]>();
+		this.winAction  = winAction;
+		this.loseAction = loseAction;
 		boardView = new GridPane();
+		
+		ChangeListener<Number> resizeListener = (observable, oldVal, newVal) -> {
+//			if()
+			int size = (int)Math.min(boardView.getWidth() / board.getCols(), boardView.getHeight() / board.getRows());
+			System.out.println(newVal);
+		};
+		boardView.widthProperty().addListener(resizeListener);
+		boardView.heightProperty().addListener(resizeListener);
 		int[][] boardValues = board.getBoard();
 		for(int r = 0; r < board.getRows(); r++)
-			for(int c = 0; c < board.getCols(); c++)
-				boardView.add(new Cell(boardValues[r][c], r, c, cellSize), c, r);
+			for(int c = 0; c < board.getCols(); c++) {
+				Cell cell = new Cell(boardValues[r][c], r, c, cellSize);
+				boardView.add(cell, c, r);
+				GridPane.setVgrow(cell, Priority.ALWAYS);
+				GridPane.setHgrow(cell, Priority.ALWAYS);
+			}
 	}
 	
 	public boolean reveal(int row, int col) {
@@ -79,6 +97,12 @@ public class BoardContainer {
 		}
 	}
 	
+	private void disableAll() {
+		for(Node n : boardView.getChildren()) {
+			((Cell)n).disable();
+		}
+	}
+	
 	public GridPane getBoardView() {
 		return boardView;
 	}
@@ -89,12 +113,13 @@ public class BoardContainer {
 		private boolean disable;
 		private Button button;
 		private Rectangle rect;
+		private Text text;
 		
 		public Cell(int value, int row, int col, double size) {
 			this.row = row;
 			this.col = col;
 			
-			Text text = new Text("" + value);
+			text = new Text("" + value);
 			text.setFill(cellTextColor[value + 1]);
 			text.setFont(Font.font("Arial", FontWeight.BOLD, (int)(0.75 * size)));
 			text.setTextOrigin(VPos.BASELINE);
@@ -107,7 +132,13 @@ public class BoardContainer {
 				if(mouseEvent.getButton() == MouseButton.PRIMARY) {
 					if(!disable) {
 						boolean success = reveal(row, col);
-						// TODO: Win action.
+						if(!success) {
+							loseAction.run();
+							disableAll();
+						} else if(board.isWon()) {
+							winAction.run();
+							disableAll();
+						}
 					}
 				} else {
 					flag(row, col);
@@ -142,6 +173,14 @@ public class BoardContainer {
 		
 		public void disable() {
 			button.setDisable(true);
+		}
+		
+		public void resize(int size) {
+			button.setMinSize(size, size);
+			button.setMaxSize(size, size);
+			rect.setWidth(size);
+			rect.setHeight(size);
+			text.setFont(Font.font("Arial", FontWeight.BOLD, (int)(0.75 * size)));
 		}
 		
 	}
