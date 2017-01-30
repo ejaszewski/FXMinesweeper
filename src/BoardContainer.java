@@ -2,6 +2,7 @@ import java.util.Arrays;
 import java.util.Stack;
 
 import javafx.beans.value.ChangeListener;
+import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -35,21 +36,13 @@ public class BoardContainer {
 		this.winAction  = winAction;
 		this.loseAction = loseAction;
 		boardView = new GridPane();
+		boardView.setAlignment(Pos.CENTER);
 		
-		ChangeListener<Number> resizeListener = (observable, oldVal, newVal) -> {
-//			if()
-			int size = (int)Math.min(boardView.getWidth() / board.getCols(), boardView.getHeight() / board.getRows());
-			System.out.println(newVal);
-		};
-		boardView.widthProperty().addListener(resizeListener);
-		boardView.heightProperty().addListener(resizeListener);
 		int[][] boardValues = board.getBoard();
 		for(int r = 0; r < board.getRows(); r++)
 			for(int c = 0; c < board.getCols(); c++) {
 				Cell cell = new Cell(boardValues[r][c], r, c, cellSize);
 				boardView.add(cell, c, r);
-				GridPane.setVgrow(cell, Priority.ALWAYS);
-				GridPane.setHgrow(cell, Priority.ALWAYS);
 			}
 	}
 	
@@ -82,6 +75,13 @@ public class BoardContainer {
 		undoBuffer.push(copyArr(redoBuffer.peek()));
 		board.setViewMatrix(redoBuffer.pop());
 		update();
+	}
+	
+	public void resize(double width, double height) {
+		int size = (int)Math.min(width / board.getCols(), height / board.getRows());
+		for(Node n : boardView.getChildren()) {
+			((Cell)n).resize(size);
+		}
 	}
 	
 	private int[][] copyArr(int[][] arr) {

@@ -1,12 +1,13 @@
 import javafx.application.Application;
-import javafx.geometry.Bounds;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -45,6 +46,18 @@ public class NewGUI extends Application {
 		root.setCenter(board.getBoardView());
 		
 		Scene scene = new Scene(root);
+		scene.widthProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				board.resize(scene.getWidth(), scene.getHeight() - root.getTop().minHeight(-1));
+			}
+		});
+		scene.heightProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				board.resize(scene.getWidth(), scene.getHeight() - root.getTop().minHeight(-1));
+			}
+		});
 		stage.setScene(scene);
 		
 		stage.setTitle("Minesweeper");
