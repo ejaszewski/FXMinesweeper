@@ -1,14 +1,12 @@
 import java.util.Arrays;
 import java.util.Stack;
 
-import javafx.beans.value.ChangeListener;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -128,7 +126,7 @@ public class BoardContainer {
 			button.setMinSize(size, size);
 			button.setMaxSize(size, size);
 			button.setOpacity(0.9);
-			button.setOnMouseClicked((mouseEvent) -> {
+			button.setOnMouseClicked((mouseEvent) -> { // public void handle(MouseEvent mouseEvent)
 				if(mouseEvent.getButton() == MouseButton.PRIMARY) {
 					if(!disable) {
 						boolean success = reveal(row, col);

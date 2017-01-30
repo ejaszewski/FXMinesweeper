@@ -18,14 +18,14 @@ public class NewGUI extends Application {
 	
 	private Stage stage;
 	private BoardContainer board;
-	private static final Runnable winAction = () -> {
+	private static final Runnable winAction = () -> { // public void run()
 		Alert a = new Alert(AlertType.INFORMATION);
 		a.setTitle("You Won!");
 		a.setHeaderText("You Won!");
 		a.setContentText("You found all of the mines and won! Congratulations!");
 		a.show();
 	};
-	private static final Runnable loseAction = () -> {
+	private static final Runnable loseAction = () -> { // public void run()
 		Alert a = new Alert(AlertType.INFORMATION);
 		a.setTitle("You Lost!");
 		a.setHeaderText("You Lost!");
@@ -71,25 +71,25 @@ public class NewGUI extends Application {
 		Menu file = new Menu("File");
 		
 		MenuItem newGame = new MenuItem("New Game");
-		newGame.setOnAction((event) -> {
+		newGame.setOnAction((event) -> { // public void handle(ActionEvent event)
 			// TODO: Implement New Game feature.
 		});
 		newGame.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
 		
 		MenuItem saveGame = new MenuItem("Save Game");
-		saveGame.setOnAction((event) -> {
+		saveGame.setOnAction((event) -> { // public void handle(ActionEvent event)
 			// TODO: Implement Save Game feature.
 		});
 		saveGame.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
 		
 		MenuItem saveGameAs = new MenuItem("Save Game As...");
-		saveGame.setOnAction((event) -> {
+		saveGame.setOnAction((event) -> { // public void handle(ActionEvent event)
 			// TODO: Implement Save Game As feature.
 		});
 		saveGameAs.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
 		
 		MenuItem loadGame = new MenuItem("Load Game");
-		loadGame.setOnAction((event) -> {
+		loadGame.setOnAction((event) -> { // public void handle(ActionEvent event)
 			// TODO: Implement Load Game feature.
 		});
 		loadGame.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
@@ -109,21 +109,21 @@ public class NewGUI extends Application {
 		restart.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN));
 		
 		MenuItem undo = new MenuItem("Undo Move");
-		undo.setOnAction((event) -> {
+		undo.setOnAction((event) -> { // public void handle(ActionEvent event)
 			// TODO: Implement Undo feature.
 			board.undo();
 		});
 		undo.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN));
 		
 		MenuItem redo = new MenuItem("Redo Move");
-		redo.setOnAction((event) -> {
+		redo.setOnAction((event) -> { // public void handle(ActionEvent event)
 			// TODO: Implement Redo feature.
 			board.redo();
 		});
 		redo.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
 		
 		MenuItem preferences = new MenuItem("Preferences");
-		preferences.setOnAction((event) -> {
+		preferences.setOnAction((event) -> { // public void handle(ActionEvent event)
 			// TODO: Implement Preferences menu.
 		});
 		preferences.setAccelerator(new KeyCodeCombination(KeyCode.ENTER, KeyCombination.ALT_DOWN));
@@ -140,7 +140,7 @@ public class NewGUI extends Application {
 		stage.setFullScreenExitKeyCombination(new KeyCodeCombination(KeyCode.F12));
 		
 		CheckMenuItem fullscreen = new CheckMenuItem("Fullscreen");
-		fullscreen.setOnAction((event) -> {
+		fullscreen.setOnAction((event) -> { // public void handle(ActionEvent event)
 			if(fullscreen.isSelected())
 				stage.setFullScreen(true);
 			else
