@@ -62,7 +62,7 @@ public class BoardContainer {
 	public void undo() {
 		if(undoBuffer.isEmpty())
 			return;
-		redoBuffer.push(copyArr(undoBuffer.peek()));
+		redoBuffer.push(board.getViewMatrix());
 		board.setViewMatrix(undoBuffer.pop());
 		update();
 	}
@@ -70,8 +70,15 @@ public class BoardContainer {
 	public void redo() {
 		if(redoBuffer.isEmpty())
 			return;
-		undoBuffer.push(copyArr(redoBuffer.peek()));
+		undoBuffer.push(board.getViewMatrix());
 		board.setViewMatrix(redoBuffer.pop());
+		update();
+	}
+	
+	public void restart() {
+		undoBuffer.clear();
+		redoBuffer.clear();
+		board.setViewMatrix(new int[board.getRows()][board.getCols()]);
 		update();
 	}
 	
@@ -85,7 +92,7 @@ public class BoardContainer {
 	private int[][] copyArr(int[][] arr) {
 		int[][] copy = new int[arr.length][];
 		for(int i = 0; i < copy.length; i++)
-			copy[i] = Arrays.copyOf(arr[i], arr[i].length);
+			copy[i] = arr[i].clone();
 		return copy;
 	}
 	

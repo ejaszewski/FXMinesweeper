@@ -104,20 +104,18 @@ public class MinesweeperGUI extends Application {
 		
 		MenuItem restart = new MenuItem("Restart Game");
 		restart.setOnAction((event) -> {
-			// TODO: Implement Restart Game feature.
+			board.restart();
 		});
 		restart.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN));
 		
 		MenuItem undo = new MenuItem("Undo Move");
 		undo.setOnAction((event) -> { // public void handle(ActionEvent event)
-			// TODO: Implement Undo feature.
 			board.undo();
 		});
 		undo.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN));
 		
 		MenuItem redo = new MenuItem("Redo Move");
 		redo.setOnAction((event) -> { // public void handle(ActionEvent event)
-			// TODO: Implement Redo feature.
 			board.redo();
 		});
 		redo.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
