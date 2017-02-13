@@ -1,3 +1,5 @@
+import java.io.File;
+
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -22,6 +24,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class MinesweeperGUI extends Application {
@@ -93,13 +96,21 @@ public class MinesweeperGUI extends Application {
 		
 		MenuItem saveGame = new MenuItem("Save Game");
 		saveGame.setOnAction((event) -> { // public void handle(ActionEvent event)
-			// TODO: Implement Save Game feature.
+			if(!board.save()) {
+			    FileChooser chooser = new FileChooser();
+	            chooser.setTitle("Save Minesweeper Game As...");
+	            File saveAs = chooser.showSaveDialog(stage);
+	            board.saveToFile(saveAs);
+			}
 		});
 		saveGame.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
 		
 		MenuItem saveGameAs = new MenuItem("Save Game As...");
-		saveGame.setOnAction((event) -> { // public void handle(ActionEvent event)
-			// TODO: Implement Save Game As feature.
+		saveGameAs.setOnAction((event) -> { // public void handle(ActionEvent event)
+		    FileChooser chooser = new FileChooser();
+            chooser.setTitle("Save Minesweeper Game As...");
+            File saveAs = chooser.showSaveDialog(stage);
+            board.saveToFile(saveAs);
 		});
 		saveGameAs.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
 		

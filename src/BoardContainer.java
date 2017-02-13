@@ -1,3 +1,7 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Stack;
 
 import javafx.geometry.Insets;
@@ -26,6 +30,7 @@ public class BoardContainer {
 	private Stack<int[][]> redoBuffer, undoBuffer;
 	private GridPane boardView;
 	private Runnable winAction, loseAction;
+	private File saveFile;
 	
 	public BoardContainer(Board board, int cellSize, Runnable winAction, Runnable loseAction, Stage stage) {
 		this.board = board;
@@ -87,6 +92,60 @@ public class BoardContainer {
 		for(Node n : boardView.getChildren()) {
 			((Cell)n).resize(size);
 		}
+	}
+	
+	public boolean save() {
+	    return saveToFile(saveFile);
+	}
+	
+	public boolean saveToFile(File saveFile) {
+	    if(saveFile == null)
+	        return false;
+	    
+	    if(saveFile.exists())
+	        saveFile.delete();
+	    try {
+            saveFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+	    
+	    try(BufferedWriter writer = new BufferedWriter(new FileWriter(saveFile))) {
+	        int rows = board.getRows(), cols = board.getCols();
+	        
+	        writer.write(rows + "," + cols);
+	        writer.newLine();
+	        
+	        String mines = "", shown = "", flagged = "", qmark = "";
+	        
+	        for(int i = 0; i < rows * cols; i++) {
+	            if(board.getBoard()[i / cols][i % rows] == Board.MINE)
+	                mines += i + ",";
+	            switch(board.getViewMatrix()[i / cols][i % rows]) {
+	            case Board.SHOWN:
+	                shown += i + ",";
+	            case Board.FLAGGED:
+                    flagged += i + ",";
+	            case Board.QMARK:
+                    qmark += i + ",";
+	            }
+	        }
+	        
+	        writer.write(mines);
+	        writer.newLine();
+	        writer.write(shown);
+            writer.newLine();
+            writer.write(flagged);
+            writer.newLine();
+            writer.write(qmark);
+            writer.newLine();
+	    } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+	    
+	    return true;
 	}
 	
 	private int[][] copyArr(int[][] arr) {
