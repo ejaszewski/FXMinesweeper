@@ -1,5 +1,8 @@
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Stack;
@@ -47,6 +50,25 @@ public class BoardContainer {
 				Cell cell = new Cell(boardValues[r][c], r, c, cellSize);
 				boardView.add(cell, c, r);
 			}
+	}
+	
+	public BoardContainer(File loadFile, int cellSize, Runnable winAction, Runnable loseAction, Stage stage) {
+	    loadFrom(loadFile);
+	    this.undoBuffer = new Stack<int[][]>();
+        this.redoBuffer = new Stack<int[][]>();
+        this.winAction  = winAction;
+        this.loseAction = loseAction;
+        boardView = new GridPane();
+        boardView.setAlignment(Pos.CENTER);
+        
+        board.printBoard(true);
+        
+        int[][] boardValues = board.getBoard();
+        for(int r = 0; r < board.getRows(); r++)
+            for(int c = 0; c < board.getCols(); c++) {
+                Cell cell = new Cell(boardValues[r][c], r, c, cellSize);
+                boardView.add(cell, c, r);
+            }
 	}
 	
 	public boolean reveal(int row, int col) {
@@ -114,21 +136,27 @@ public class BoardContainer {
 	    try(BufferedWriter writer = new BufferedWriter(new FileWriter(saveFile))) {
 	        int rows = board.getRows(), cols = board.getCols();
 	        
-	        writer.write(rows + "," + cols);
+	        writer.write("FX Minesweeper Save Game");
+	        writer.newLine();
+	        writer.write(rows);
+	        writer.write(cols);
 	        writer.newLine();
 	        
-	        String mines = "", shown = "", flagged = "", qmark = "";
+	        String mines = "", shown = "", flags = "", qmark = "";
 	        
 	        for(int i = 0; i < rows * cols; i++) {
 	            if(board.getBoard()[i / cols][i % rows] == Board.MINE)
-	                mines += i + ",";
+	                mines += (char)i;
 	            switch(board.getViewMatrix()[i / cols][i % rows]) {
 	            case Board.SHOWN:
-	                shown += i + ",";
+	                shown += (char)i;
+	                break;
 	            case Board.FLAGGED:
-                    flagged += i + ",";
+                    flags += (char)i;
+                    break;
 	            case Board.QMARK:
-                    qmark += i + ",";
+                    qmark += (char)i;
+                    break;
 	            }
 	        }
 	        
@@ -136,16 +164,65 @@ public class BoardContainer {
 	        writer.newLine();
 	        writer.write(shown);
             writer.newLine();
-            writer.write(flagged);
+            writer.write(flags);
             writer.newLine();
             writer.write(qmark);
-            writer.newLine();
+            
 	    } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
 	    
 	    return true;
+	}
+	
+	public boolean loadFrom(File loadFile) {
+	    try(BufferedReader reader = new BufferedReader(new FileReader(loadFile))) {
+	        if(!reader.readLine().equals("FX Minesweeper Save Game")) {
+	            System.err.println("Invalid FX Minesweeper Save Game: Incorrect file header.");
+	            return false;
+	        }
+	        String size = reader.readLine();
+	        String mines = reader.readLine();
+	        String shown = reader.readLine();
+	        String flags = reader.readLine();
+	        String qmark = reader.readLine();
+	        
+	        if(mines == null || shown == null || flags == null || qmark == null) {
+	            System.err.println("Invalid FX Minesweeper Save Game: One or more missing lines.");
+                return false;
+	        }
+	        
+	        int rows = size.charAt(0), cols = size.charAt(1);
+	        
+	        int[][] boardArr = new int[rows][cols];
+	        parseSaveLine(mines, rows, cols, Board.MINE, boardArr);
+	        
+	        int[][] viewMatrix = new int[rows][cols];
+	        parseSaveLine(shown, rows, cols, Board.SHOWN, viewMatrix);
+            parseSaveLine(flags, rows, cols, Board.FLAGGED, viewMatrix);
+            parseSaveLine(qmark, rows, cols, Board.QMARK, viewMatrix);
+            
+            board = new Board(boardArr, viewMatrix, mines.length());
+	        
+	        saveFile = loadFile;
+	        
+	        System.out.println("FX Minesweeper game loaded from " + loadFile.getAbsolutePath());
+	    } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+	    return true;
+	}
+	
+	private void parseSaveLine(String line, int rows, int cols, int value, int[][] arr) {
+	    for(int i = 0; i < line.length(); i++) {
+            int coord = line.charAt(i);
+            arr[coord / cols][coord % rows] = value;
+        }
 	}
 	
 	private int[][] copyArr(int[][] arr) {
@@ -197,6 +274,7 @@ public class BoardContainer {
 			button.setMaxSize(size, size);
 			button.setPadding(new Insets(0));
 			button.setFont(font);
+			button.setOpacity(0.8);
 			button.setOnMouseClicked((mouseEvent) -> { // public void handle(MouseEvent mouseEvent)
 				if(mouseEvent.getButton() == MouseButton.PRIMARY) {
 					if(!disable) {

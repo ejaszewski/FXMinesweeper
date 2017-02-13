@@ -25,6 +25,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 public class MinesweeperGUI extends Application {
@@ -99,6 +100,7 @@ public class MinesweeperGUI extends Application {
 			if(!board.save()) {
 			    FileChooser chooser = new FileChooser();
 	            chooser.setTitle("Save Minesweeper Game As...");
+	            chooser.getExtensionFilters().add(new ExtensionFilter("FX Minesweeer Saves", "*.fxms"));
 	            File saveAs = chooser.showSaveDialog(stage);
 	            board.saveToFile(saveAs);
 			}
@@ -109,6 +111,7 @@ public class MinesweeperGUI extends Application {
 		saveGameAs.setOnAction((event) -> { // public void handle(ActionEvent event)
 		    FileChooser chooser = new FileChooser();
             chooser.setTitle("Save Minesweeper Game As...");
+            chooser.getExtensionFilters().add(new ExtensionFilter("FX Minesweeer Saves", "*.fxms"));
             File saveAs = chooser.showSaveDialog(stage);
             board.saveToFile(saveAs);
 		});
@@ -116,7 +119,15 @@ public class MinesweeperGUI extends Application {
 		
 		MenuItem loadGame = new MenuItem("Load Game");
 		loadGame.setOnAction((event) -> { // public void handle(ActionEvent event)
-			// TODO: Implement Load Game feature.
+		    FileChooser chooser = new FileChooser();
+            chooser.setTitle("Load Minesweeper Game");
+            chooser.getExtensionFilters().add(new ExtensionFilter("FX Minesweeer Saves", "*.fxms"));
+            File load = chooser.showOpenDialog(stage);
+            if(load == null)
+                return;
+            board = new BoardContainer(load, 20, winAction, loseAction, stage);
+            root.setCenter(board.getBoardView());
+            board.resize(scene.getWidth(), scene.getHeight() - root.getTop().minHeight(-1));
 		});
 		loadGame.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
 		

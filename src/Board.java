@@ -64,6 +64,22 @@ public class Board {
 		viewMatrix = new int[rows][cols];
 		addMines(mines);
 	}
+	
+	/**
+	 * Creates a board using an integer array with the mines placed, and a view matrix.
+	 * 
+	 * @param board board with only mines placed
+	 * @param viewMatrix view matrix to use
+	 */
+	public Board(int[][] board, int[][] viewMatrix, int mines) {
+	    this.board = board;
+	    this.viewMatrix = viewMatrix;
+	    this.rows = board.length;
+	    this.cols = board[0].length;
+	    this.mines = mines;
+	    this.flags = 0;
+	    countMines();
+	}
 
 	/**
 	 * Places the given number of mines on the board. Also generates adjacent
@@ -81,14 +97,21 @@ public class Board {
 			}
 			board[r][c] = MINE;
 		}
-		for (int r = 0; r < rows; r++)
-			for (int c = 0; c < cols; c++)
-				if (board[r][c] == MINE)
-					for (int ro = -1; ro < 2; ro++)
-						for (int co = -1; co < 2; co++)
-							if (r + ro > -1 && r + ro < rows && c + co > -1 && c + co < cols
-									&& board[r + ro][c + co] != MINE)
-								board[r + ro][c + co]++;
+		countMines();
+	}
+	
+	/**
+	 * Counts the mines around each square in the board.
+	 */
+	private void countMines() {
+	    for (int r = 0; r < rows; r++)
+            for (int c = 0; c < cols; c++)
+                if (board[r][c] == MINE)
+                    for (int ro = -1; ro < 2; ro++)
+                        for (int co = -1; co < 2; co++)
+                            if (r + ro > -1 && r + ro < rows && c + co > -1 && c + co < cols
+                                    && board[r + ro][c + co] != MINE)
+                                board[r + ro][c + co]++;
 	}
 	
 	/**
