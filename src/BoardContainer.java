@@ -1,6 +1,6 @@
-import java.util.Arrays;
 import java.util.Stack;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
@@ -124,15 +124,20 @@ public class BoardContainer {
 			this.row = row;
 			this.col = col;
 			
+			Font font = Font.font("Arial", FontWeight.BOLD, (int)(0.75 * size));
+			
 			text = new Text("" + value);
 			text.setFill(cellTextColor[value + 1]);
-			text.setFont(Font.font("Arial", FontWeight.BOLD, (int)(0.75 * size)));
+			text.setFont(font);
 			text.setTextOrigin(VPos.BASELINE);
+			
 			rect = new Rectangle(size, size, Color.AZURE);
+			
 			button = new Button();
 			button.setMinSize(size, size);
 			button.setMaxSize(size, size);
-			button.setOpacity(0.9);
+			button.setPadding(new Insets(0));
+			button.setFont(font);
 			button.setOnMouseClicked((mouseEvent) -> { // public void handle(MouseEvent mouseEvent)
 				if(mouseEvent.getButton() == MouseButton.PRIMARY) {
 					if(!disable) {
@@ -185,7 +190,10 @@ public class BoardContainer {
 			button.setMaxSize(size, size);
 			rect.setWidth(size);
 			rect.setHeight(size);
-			text.setFont(Font.font("Arial", FontWeight.BOLD, (int)(0.75 * size)));
+			
+			Font font = Font.font("Arial", FontWeight.BOLD, (int)(0.75 * size));
+			text.setFont(font);
+			button.setFont(font);
 		}
 		
 	}
