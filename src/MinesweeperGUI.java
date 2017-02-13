@@ -1,10 +1,18 @@
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -12,11 +20,16 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class MinesweeperGUI extends Application {
 	
 	private Stage stage;
+	private Stage newGameStage;
+	private Scene scene;
+	private BorderPane root;
 	private BoardContainer board;
 	private static final Runnable winAction = () -> { // public void run()
 		Alert a = new Alert(AlertType.INFORMATION);
@@ -37,7 +50,7 @@ public class MinesweeperGUI extends Application {
 	public void start(Stage arg0) {
 		stage = arg0;
 		
-		BorderPane root = new BorderPane();
+		root = new BorderPane();
 		
 		root.setTop(new MenuBar(fileMenu(), editMenu(), viewMenu()));
 		
@@ -45,7 +58,7 @@ public class MinesweeperGUI extends Application {
 		
 		root.setCenter(board.getBoardView());
 		
-		Scene scene = new Scene(root);
+		scene = new Scene(root);
 		scene.widthProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -60,6 +73,8 @@ public class MinesweeperGUI extends Application {
 		});
 		stage.setScene(scene);
 		
+		newGameStage();
+		
 		stage.setTitle("Minesweeper");
 		stage.setMinHeight(400);
 		stage.setMinWidth(400);
@@ -72,7 +87,7 @@ public class MinesweeperGUI extends Application {
 		
 		MenuItem newGame = new MenuItem("New Game");
 		newGame.setOnAction((event) -> { // public void handle(ActionEvent event)
-			// TODO: Implement New Game feature.
+			newGameStage.show();
 		});
 		newGame.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
 		
@@ -149,6 +164,74 @@ public class MinesweeperGUI extends Application {
 		view.getItems().addAll(fullscreen);
 		
 		return view;
+	}
+	
+	private void newGameStage() {
+	    newGameStage = new Stage();
+        newGameStage.setTitle("New Game");
+        
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(12);
+        gridPane.setAlignment(Pos.CENTER);
+        
+        Label newGameLabel = new Label("New Game");     
+        newGameLabel.setStyle("-fx-font-size: 16pt;");
+        gridPane.add(newGameLabel, 0, 0, 2, 1);
+        GridPane.setHalignment(newGameLabel, HPos.CENTER);
+        
+        ComboBox<String> comboBox = new ComboBox<String>();
+        comboBox.getItems().addAll("Small", "Medium", "Large", "Humongous");
+        comboBox.setValue("Small");
+        gridPane.add(comboBox, 0, 1, 2, 1);
+        GridPane.setHalignment(comboBox, HPos.CENTER);
+        
+        Button startButton = new Button("Start");
+        startButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                switch(comboBox.getSelectionModel().getSelectedItem()) {
+                case "Small":
+                    board = new BoardContainer(new Board(Board.SMALL), 20, winAction, loseAction, stage);
+                    break;
+                    
+                case "Medium":
+                    board = new BoardContainer(new Board(Board.MEDIUM), 20, winAction, loseAction, stage);
+                    break;
+                    
+                case "Large":
+                    board = new BoardContainer(new Board(Board.LARGE), 20, winAction, loseAction, stage);
+                    break;
+                    
+                case "Humongous":
+                    board = new BoardContainer(new Board(Board.HUMONGOUS), 20, winAction, loseAction, stage);
+                    break;
+                }
+                
+                board.resize(scene.getWidth(), scene.getHeight() - root.getTop().minHeight(-1));
+                
+                root.setCenter(board.getBoardView());
+                newGameStage.hide();
+            }
+        });
+        
+        Button cancelButton = new Button("Cancel");
+        cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                newGameStage.hide();
+            }
+        });
+        
+        HBox buttons = new HBox();
+        buttons.setSpacing(10);
+        buttons.getChildren().addAll(startButton, cancelButton);
+        gridPane.add(buttons, 0, 2, 2, 1);
+        gridPane.setPadding(new Insets(10, 70, 20, 70));
+        
+        Scene newGameScene = new Scene(gridPane);
+        newGameStage.setScene(newGameScene);
+        newGameStage.centerOnScreen();
 	}
 	
 	public static void main(String[] args) {
