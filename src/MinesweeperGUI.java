@@ -102,6 +102,10 @@ public class MinesweeperGUI extends Application {
 	            chooser.setTitle("Save Minesweeper Game As...");
 	            chooser.getExtensionFilters().add(new ExtensionFilter("FX Minesweeer Saves", "*.fxms"));
 	            File saveAs = chooser.showSaveDialog(stage);
+	            if(saveAs == null)
+	                return;
+	            if(!saveAs.getName().endsWith(".fxms"))
+	                saveAs = new File(saveAs.getAbsolutePath() + ".fxms");
 	            board.saveToFile(saveAs);
 			}
 		});
@@ -113,6 +117,10 @@ public class MinesweeperGUI extends Application {
             chooser.setTitle("Save Minesweeper Game As...");
             chooser.getExtensionFilters().add(new ExtensionFilter("FX Minesweeer Saves", "*.fxms"));
             File saveAs = chooser.showSaveDialog(stage);
+            if(saveAs == null)
+                return;
+            if(!saveAs.getName().endsWith(".fxms"))
+                saveAs = new File(saveAs.getAbsolutePath() + ".fxms");
             board.saveToFile(saveAs);
 		});
 		saveGameAs.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
