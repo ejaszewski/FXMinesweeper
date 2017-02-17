@@ -335,4 +335,7 @@ public class BoardContainer {
 		
 	}
 	
+	public Board getBoard() {
+		return board;
+	}
 }

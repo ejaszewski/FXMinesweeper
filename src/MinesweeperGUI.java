@@ -95,6 +95,14 @@ public class MinesweeperGUI extends Application {
 		});
 		newGame.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
 		
+		MenuItem quickGame = new MenuItem("Quick Game");
+		quickGame.setOnAction((event) -> {
+			board = new BoardContainer(new Board(board.getBoard().getSize()), 20, winAction, loseAction, stage);
+			board.resize(scene.getWidth(), scene.getHeight() - root.getTop().minHeight(-1));
+            root.setCenter(board.getBoardView());
+		});
+		quickGame.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
+		
 		MenuItem saveGame = new MenuItem("Save Game");
 		saveGame.setOnAction((event) -> { // public void handle(ActionEvent event)
 			if(!board.save()) {
@@ -139,7 +147,7 @@ public class MinesweeperGUI extends Application {
 		});
 		loadGame.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
 		
-		file.getItems().addAll(newGame, saveGame, saveGameAs, loadGame);
+		file.getItems().addAll(newGame, quickGame, saveGame, saveGameAs, loadGame);
 		
 		return file;
 	}

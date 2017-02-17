@@ -31,6 +31,7 @@ public class Board {
 
 	private int[][] board, viewMatrix;
 	private int rows, cols, mines, flags;
+	private int size;
 
 	/**
 	 * Creates a 'SMALL' board.
@@ -46,6 +47,7 @@ public class Board {
 	 */
 	public Board(int size) {
 		this(boardSizes[size][0], boardSizes[size][1], boardSizes[size][2]);
+		this.size = size;
 	}
 
 	/**
@@ -225,6 +227,13 @@ public class Board {
 	 */
 	public int getFlags() {
 		return flags;
+	}
+	
+	/**
+	 * @return the size
+	 */
+	public int getSize() {
+		return size;
 	}
 
 	public boolean isWon() {
