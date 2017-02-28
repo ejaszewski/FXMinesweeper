@@ -61,7 +61,7 @@ public class BoardContainer {
         boardView = new GridPane();
         boardView.setAlignment(Pos.CENTER);
         
-        board.printBoard(true);
+        board.printBoard();
         
         int[][] boardValues = board.getBoard();
         for(int r = 0; r < board.getRows(); r++)

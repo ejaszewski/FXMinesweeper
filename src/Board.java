@@ -119,9 +119,10 @@ public class Board {
 	/**
 	 * A method that reveals an area of cells originating at the given row and col.
 	 * Calls a separate recursive method that performs the revealing.
-	 * @param row
-	 * @param col
-	 * @return
+	 * 
+     * @param row row of square to be revealed
+     * @param col col of square to be revealed
+	 * @return true if reveal was successful, false if out of bounds or on a mine
 	 */
 	public boolean reveal(int row, int col) {
 		if (row < 0 || col < 0 || row > rows || col > cols)
@@ -149,7 +150,18 @@ public class Board {
 		}
 	}
 
-	// TODO: Flag method. HIDDEN->FLAGGED->QMARK->Hidden
+	/**
+	 * Performs a standard flagging procedure on the given tile.
+	 * If flags < mines then:
+	 *     Hidden -> Flagged -> Question Mark -> Hidden
+	 * If flags > mines then:
+	 *     Hidden -> Question Mark -> Hidden
+	 *  --or--
+	 *     Flagged -> Question Mark
+	 *     
+	 * @param row row of square to be flagged
+	 * @param col col of square to be flagged
+	 */
 	public void flag(int row, int col) {
 		switch(viewMatrix[row][col]) {
 		case HIDDEN: viewMatrix[row][col] = FLAGGED; flags++; break;
@@ -159,28 +171,37 @@ public class Board {
 	}
 	
 	/**
-	 * This print method has two behaviors based on showAll. If showAll is true,
-	 * it will print the board, ignoring the viewMatrix (all mines shown),
-	 * otherwise, it prints the board as it would be displayed (hiding, showing,
-	 * flags, question marks).
-	 * 
-	 * @param showAll whether or not to show everything
+	 * This print method prints the board as it would be displayed (hiding, showing,
+	 * flags, question marks). It calls the object's toString method.
 	 */
-	public void printBoard(boolean showAll) {
-		for (int r = 0; r < rows; r++) {
-			for (int c = 0; c < cols; c++) {
-				if (viewMatrix[r][c] == SHOWN) {
-					if (board[r][c] < 0)
-						System.out.print("M");
-					else if (board[r][c] == 0)
-						System.out.print(" ");
-					else
-						System.out.print(board[r][c]);
-				} else
-					System.out.print("#");
-			}
-			System.out.println();
-		}
+	public void printBoard() {
+		System.out.println(this);
+	}
+	
+	/**
+	 * This toString returns a String representation of the board as it would be displayed,
+	 * i.e. with hidden squares, flagged squares, etc.
+	 * 
+	 * @return String representation of this board
+	 */
+	@Override
+	public String toString() {
+	    StringBuilder builder = new StringBuilder();
+	    for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                if (viewMatrix[r][c] == SHOWN) {
+                    if (board[r][c] < 0)
+                        builder.append("M");
+                    else if (board[r][c] == 0)
+                        builder.append(" ");
+                    else
+                        builder.append(board[r][c]);
+                } else
+                    System.out.print("#");
+            }
+            builder.append("\n");
+        }
+	    return builder.toString().trim();
 	}
 
 	/**
@@ -207,15 +228,24 @@ public class Board {
 		this.viewMatrix = viewMatrix;
 	}
 
+	/**
+	 * Gets the number of rows in the board.
+	 * @return number of rows in the board
+	 */
 	public int getRows() {
 		return rows;
 	}
 
+	/**
+	 * Gets the number of rows in the board.
+	 * @return number of rows in the board
+	 */
 	public int getCols() {
 		return cols;
 	}
 	
 	/**
+	 * Gets the number of mines on the board.
 	 * @return the mines
 	 */
 	public int getMines() {
@@ -223,6 +253,7 @@ public class Board {
 	}
 
 	/**
+	 * Gets the number of flagged squares.
 	 * @return the flags
 	 */
 	public int getFlags() {
@@ -230,12 +261,17 @@ public class Board {
 	}
 	
 	/**
+	 * Gets the size value of board (Small, Medium, etc.)
 	 * @return the size
 	 */
 	public int getSize() {
 		return size;
 	}
 
+	/**
+	 * Returns true if the game is won, returns false in any other state.
+	 * @return true if the game is won
+	 */
 	public boolean isWon() {
 		boolean won = true;
 		for (int r = 0; r < rows; r++) {
