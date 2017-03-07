@@ -35,6 +35,10 @@ public class MinesweeperGUI extends Application {
 	private Scene scene;
 	private BorderPane root;
 	private BoardContainer board;
+	
+	/**
+	 * Action to run when a game is won.
+	 */
 	private static final Runnable winAction = () -> { // public void run()
 		Alert a = new Alert(AlertType.INFORMATION);
 		a.setTitle("You Won!");
@@ -42,6 +46,10 @@ public class MinesweeperGUI extends Application {
 		a.setContentText("You found all of the mines and won! Congratulations!");
 		a.show();
 	};
+	
+	/**
+	 * Action to run when a game is lost.
+	 */
 	private static final Runnable loseAction = () -> { // public void run()
 		Alert a = new Alert(AlertType.INFORMATION);
 		a.setTitle("You Lost!");
@@ -86,6 +94,12 @@ public class MinesweeperGUI extends Application {
 		stage.centerOnScreen();
 	}
 	
+	/**
+	 * Sets up the "File" menu for the menu bar.
+	 * Defines the New Game, Quick Game, Save, Save As, and Load actions
+	 * and corresponding menu items.
+	 * @return "File" menu
+	 */
 	private Menu fileMenu() {
 		Menu file = new Menu("File");
 		
@@ -152,6 +166,12 @@ public class MinesweeperGUI extends Application {
 		return file;
 	}
 	
+	/**
+     * Sets up the "Edit" menu for the menu bar.
+     * Defines the Restart, Undo, and Redo actions and
+     * corresponding menu items.
+     * @return "Edit" menu
+     */
 	private Menu editMenu() {
 		Menu edit = new Menu("Edit");
 		
@@ -173,17 +193,16 @@ public class MinesweeperGUI extends Application {
 		});
 		redo.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
 		
-		MenuItem preferences = new MenuItem("Preferences");
-		preferences.setOnAction((event) -> { // public void handle(ActionEvent event)
-			// TODO: Implement Preferences menu.
-		});
-		preferences.setAccelerator(new KeyCodeCombination(KeyCode.ENTER, KeyCombination.ALT_DOWN));
-		
-		edit.getItems().addAll(restart, undo, redo, preferences);
+		edit.getItems().addAll(restart, undo, redo);
 		
 		return edit;
 	}
 	
+	/**
+     * Sets up the "View" menu for the menu bar.
+     * Defines the Fullscreen action and the Fullscreen menu item.
+     * @return "View" menu
+     */
 	private Menu viewMenu() {
 		Menu view = new Menu("View");
 		
